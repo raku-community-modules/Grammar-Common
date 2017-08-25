@@ -45,7 +45,8 @@ role Grammar::Common::Expression::Infix
 
 	rule term
 		{
-		|| <open-paren-symbol> <expression> <close-paren-symbol>
+		|| <minus-symbol>?
+			<open-paren-symbol> <expression> <close-paren-symbol>
 		|| <value>
 		}
 

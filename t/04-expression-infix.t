@@ -26,7 +26,6 @@ grammar InScript does Grammar::Common::Expression::Infix {
 
 my $i = InScript.new;
 
-#`(
 subtest {
 	nok $i.parse( '' ), 'empty expression';
 
@@ -88,11 +87,15 @@ subtest {
 	subtest {
 		nok $i.parse( '1 1' );
 		nok $i.parse( '-1 1' );
-		nok $i.parse( '1 -1' );
-		nok $i.parse( '-1 -1' );
 	}, 'two operands';
+
+	subtest {
+		nok $i.parse( '(1' );
+		nok $i.parse( '1)' );
+		nok $i.parse( ')1' );
+		nok $i.parse( '1(' );
+	}, 'unbalanced parens';
 }, 'failing tests';
-)
 
 subtest {
 	ok $i.parse('1'), '1';
@@ -103,6 +106,32 @@ subtest {
 		ok $i.parse('1*1'), '1*1';
 		ok $i.parse('1/1'), '1/1';
 		ok $i.parse('1%1'), '1%1';
+
+		subtest {
+			subtest {
+				ok $i.parse('-1+1'), '-1+1';
+				ok $i.parse('-1-1'), '-1-1';
+				ok $i.parse('-1*1'), '-1*1';
+				ok $i.parse('-1/1'), '-1/1';
+				ok $i.parse('-1%1'), '-1%1';
+			}, 'first';
+
+			subtest {
+				ok $i.parse('1+-1'), '1+-1';
+				ok $i.parse('1--1'), '1--1';
+				ok $i.parse('1*-1'), '1*-1';
+				ok $i.parse('1/-1'), '1/-1';
+				ok $i.parse('1%-1'), '1%-1';
+			}, 'second';
+
+			subtest {
+				ok $i.parse('-1+-1'), '-1+-1';
+				ok $i.parse('-1--1'), '-1--1';
+				ok $i.parse('-1*-1'), '-1*-1';
+				ok $i.parse('-1/-1'), '-1/-1';
+				ok $i.parse('-1%-1'), '-1%-1';
+			}, 'both';
+		}, 'negative numbers';
 
 		subtest {
 			ok $i.parse('1+1+1'), '1+1+1';
@@ -157,6 +186,13 @@ subtest {
 		}, 'another operator';
 	}, 'with operator';
 }, 'paren around single term';
+
+subtest {
+	ok $i.parse('-(1)'), '-(1)';
+	ok $i.parse('-(1+1)'), '-(1+1)';
+	ok $i.parse('1-(1)'), '1-(1)'; # equivalent to '1-1', not '1 (-1)'
+	ok $i.parse('1--(1)'), '1--(1)';
+}, 'negated parens';
 
 subtest {
 	ok $i.parse('(1+1)'), '(1+1)';

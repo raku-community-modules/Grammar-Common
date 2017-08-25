@@ -94,182 +94,103 @@ subtest {
 }, 'failing tests';
 )
 
-#`(
 subtest {
-	subtest {
-		subtest {
-			ok $i.parse( '0' ), '0';
-			ok $i.parse( '1' ), '1';
-			ok $i.parse( '7' ), '7';
-			ok $i.parse( '-1' ), '-1';
-		}, 'single digit';
-
-		subtest {
-			ok $i.parse( '10' ), '10';
-			ok $i.parse( '1_0' ), '1_0';
-		}, 'multiple digits';
-	}, 'number';
-
-	subtest {
-		ok $i.parse( 'a' ), 'a';
-		ok $i.parse( 'a_' ), 'a_';
-	}, 'c-variable';
-}, 'value';
-)
-
-#`(
-subtest {
-	subtest {
-		ok $i.parse( '0 + 1' );
-		ok $i.parse( '0 - 1' );
-		ok $i.parse( '0 * 1' );
-		ok $i.parse( '0 / 1' );
-	}, 'op number number';
-
-	subtest {
-		ok $i.parse( '0 + b' );
-		ok $i.parse( '0 - b' );
-		ok $i.parse( '0 * b' );
-		ok $i.parse( '0 / b' );
-	}, 'op number variable';
-
-	subtest {
-		ok $i.parse( 'a + 1' );
-		ok $i.parse( 'a - 1' );
-		ok $i.parse( 'a * 1' );
-		ok $i.parse( 'a / 1' );
-	}, 'op variable number';
-
-	subtest {
-		ok $i.parse( 'a + b' );
-		ok $i.parse( 'a - b' );
-		ok $i.parse( 'a * b' );
-		ok $i.parse( 'a / b' );
-	}, 'op variable variable';
-}, 'single operand';
-)
-
-#`(
-subtest {
-	subtest {
-		ok $i.parse( '( 0 )' );
-
-		ok $i.parse( '( 0 + 1 )' );
-		ok $i.parse( '( 0 - 1 )' );
-		ok $i.parse( '( 0 * 1 )' );
-		ok $i.parse( '( 0 / 1 )' );
-	}, 'parentheses';
-
-	subtest {
-		ok $i.parse( '-1 + ( 0 ) + -1' );
-
-		ok $i.parse( '-1 + ( 0 + 1 ) + -1' );
-		ok $i.parse( '-1 - ( 0 - 1 ) - -1' );
-		ok $i.parse( '-1 * ( 0 * 1 ) * -1' );
-		ok $i.parse( '-1 / ( 0 / 1 ) / -1' );
-	}, 'parentheses';
-}, 'parentheses';
-)
-
-#`(
-subtest {
-	ok $i.parse( '1 + 2 + 3' );
-
-#	ok $i.parse( '-1 + -2 + -3' );
-#	ok $i.parse( '++a 2c' );
-}, 'two operands';
-)
-
-subtest {
-	ok $i.parse('( 1 + ( 1 + 1 ) + 1 )'), '(1+(1+1)+1)';
-	ok $i.parse('( 1 + ( 1 + 1 ) / 1 )'), '(1+(1+1)/1)';
-	ok $i.parse('( 1 + ( 1 / 1 ) + 1 )'), '(1+(1/1)+1)';
-	ok $i.parse('( 1 + ( 1 / 1 ) / 1 )'), '(1+(1/1)/1)';
-	ok $i.parse('( 1 / ( 1 + 1 ) + 1 )'), '(1/(1+1)+1)';
-	ok $i.parse('( 1 / ( 1 + 1 ) / 1 )'), '(1/(1+1)/1)';
-	ok $i.parse('( 1 / ( 1 / 1 ) + 1 )'), '(1/(1/1)+1)';
-	ok $i.parse('( 1 / ( 1 / 1 ) / 1 )'), '(1/(1/1)/1)';
-
-	ok $i.parse('1 + ( 1 + 1 ) + 1'), Q{1+(1+1)+1};
-	ok $i.parse('1 + 1 + 1 + 1'), Q{1+1+1+1};
-	ok $i.parse('1 + ( 1 + 1 ) / 1'), Q{1+(1+1)/1};
-	ok $i.parse('1 + 1 + 1 / 1'), Q{1+1+1/1};
-	ok $i.parse('1 + ( 1 / 1 ) + 1'), Q{1+(1/1)+1};
-	ok $i.parse('1 + 1 / 1 + 1'), Q{1+1/1+1};
-	ok $i.parse('1 + ( 1 / 1 ) / 1'), Q{1+(1/1)/1};
-	ok $i.parse('1 + 1 / 1 / 1'), Q{1+1/1/1};
-	ok $i.parse('1 / ( 1 + 1 ) + 1'), Q{1/(1+1)+1};
-	ok $i.parse('1 / 1 + 1 / 1'), Q{1/1+1+1};
-	ok $i.parse('1 / ( 1 + 1 ) + 1'), Q{1/(1+1)/1};
-	ok $i.parse('1 / 1 + 1 / 1'), Q{1/1+1/1};
-	ok $i.parse('1 / ( 1 / 1 ) + 1'), Q{1/(1/1)+1};
-	ok $i.parse('1 / 1 / 1 + 1'), Q{1/1/1+1};
-	ok $i.parse('1 / ( 1 / 1 ) / 1'), Q{1/(1/1)/1};
-	ok $i.parse('1 / 1 / 1 / 1'), Q{1/1 /1/1};
-}, 'three operators';
-
-# If you haven't spotted the pattern by now, it's pretty simple.
-# Start with the paren at the left, move it along to every possible spot
-# in the expression until it reaches the end, then move the paren one along
-# and repeat.
-
-# And don't forget multiple parens... aiyee.
-
-subtest {
-	subtest {
-		ok $i.parse('( 1 ) + 1 + 1'), '( 1 ) + 1 + 1';
-		ok $i.parse('( 1 ) + 1 / 1'), '( 1 ) + 1 / 1';
-		ok $i.parse('( 1 ) / 1 + 1'), '( 1 ) / 1 + 1';
-		ok $i.parse('( 1 ) / 1 / 1'), '( 1 ) / 1 / 1';
-
-		ok $i.parse('( 1 + 1 ) + 1'), '( 1 + 1 ) + 1';
-		ok $i.parse('( 1 + 1 ) / 1'), '( 1 + 1 ) / 1';
-		ok $i.parse('( 1 / 1 ) + 1'), '( 1 / 1 ) + 1';
-		ok $i.parse('( 1 / 1 ) / 1'), '( 1 / 1 ) / 1';
-
-		ok $i.parse('( 1 + 1 + 1 )'), '( 1 + 1 + 1 )';
-		ok $i.parse('( 1 + 1 / 1 )'), '( 1 + 1 / 1 )';
-		ok $i.parse('( 1 / 1 + 1 )'), '( 1 / 1 + 1 )';
-		ok $i.parse('( 1 / 1 / 1 )'), '( 1 / 1 / 1 )';
-
-		ok $i.parse('1 + ( 1 ) + 1'), '1 + ( 1 ) + 1';
-		ok $i.parse('1 + ( 1 ) / 1'), '1 + ( 1 ) / 1';
-		ok $i.parse('1 / ( 1 ) + 1'), '1 / ( 1 ) + 1';
-		ok $i.parse('1 / ( 1 ) / 1'), '1 / ( 1 ) / 1';
-
-		ok $i.parse('1 + ( 1 + 1 )'), '1 + ( 1 + 1 )';
-		ok $i.parse('1 + ( 1 / 1 )'), '1 + ( 1 / 1 )';
-		ok $i.parse('1 / ( 1 + 1 )'), '1 / ( 1 + 1 )';
-		ok $i.parse('1 / ( 1 / 1 )'), '1 / ( 1 / 1 )';
-	}, 'with parens';
-
-	ok $i.parse('1 / 1 / 1'), '1/1/1';
-	ok $i.parse('1 / 1 + 1'), '1/1+1';
-	ok $i.parse('1 + 1 / 1'), '1+1/1';
-	ok $i.parse('1 + 1 + 1'), '1+1+1';
-}, 'two operators';
-
-subtest {
-	subtest {
-		ok $i.parse('( 1 ) + 1'), '(1)+1';
-		ok $i.parse('( 1 ) / 1'), '(1)/1';
-
-		ok $i.parse('( 1 + 1 )'), '(1+1)';
-		ok $i.parse('( 1 / 1 )'), '(1/1)';
-
-		ok $i.parse('1 + ( 1 )'), '1+(1)';
-		ok $i.parse('1 / ( 1 )'), '1/(1)';
-	}, 'with parens';
-
-	ok $i.parse('1 + 1'), '1+1';
-	ok $i.parse('1 / 1'), '1/1';
-}, 'single operator';
-
-subtest {
-	ok $i.parse('( ( ( 1 ) ) )'), '( ( ( 1 ) ) )';
-	ok $i.parse('( 1 )'), '( 1 )';
 	ok $i.parse('1'), '1';
-}, 'single value';
+
+	subtest {
+		ok $i.parse('1+1'), '1+1';
+		ok $i.parse('1-1'), '1-1';
+		ok $i.parse('1*1'), '1*1';
+		ok $i.parse('1/1'), '1/1';
+		ok $i.parse('1%1'), '1%1';
+
+		subtest {
+			ok $i.parse('1+1+1'), '1+1+1';
+			ok $i.parse('1+1-1'), '1+1-1';
+			ok $i.parse('1+1*1'), '1+1*1';
+			ok $i.parse('1+1/1'), '1+1/1';
+			ok $i.parse('1+1%1'), '1+1%1';
+
+			ok $i.parse('1-1+1'), '1-1+1';
+			ok $i.parse('1-1-1'), '1-1-1';
+			ok $i.parse('1-1*1'), '1-1*1';
+			ok $i.parse('1-1/1'), '1-1/1';
+			ok $i.parse('1-1%1'), '1-1%1';
+
+			ok $i.parse('1*1+1'), '1*1+1';
+			ok $i.parse('1*1-1'), '1*1-1';
+			ok $i.parse('1*1*1'), '1*1*1';
+			ok $i.parse('1*1/1'), '1*1/1';
+			ok $i.parse('1*1%1'), '1*1%1';
+
+			ok $i.parse('1/1+1'), '1/1+1';
+			ok $i.parse('1/1-1'), '1/1-1';
+			ok $i.parse('1/1*1'), '1/1*1';
+			ok $i.parse('1/1/1'), '1/1/1';
+			ok $i.parse('1/1%1'), '1/1%1';
+
+			ok $i.parse('1%1+1'), '1%1+1';
+			ok $i.parse('1%1-1'), '1%1-1';
+			ok $i.parse('1%1*1'), '1%1*1';
+			ok $i.parse('1%1/1'), '1%1/1';
+			ok $i.parse('1%1%1'), '1%1%1';
+		}, 'another operator';
+	}, 'with operator';
+}, 'no parens';
+
+subtest {
+	ok $i.parse('(1)'), '(1)';
+
+	subtest {
+		ok $i.parse('(1)+1'), '(1)+1';
+		ok $i.parse('1+(1)'), '1+(1)';
+		ok $i.parse('(1)+(1)'), '(1)+(1)';
+
+		subtest {
+			ok $i.parse('(1)+1+1'), '(1)+1+1';
+			ok $i.parse('1+(1)+1'), '1+(1)+1';
+			ok $i.parse('(1)+(1)+1'), '(1)+(1)+1';
+			ok $i.parse('1+1+(1)'), '1+1+(1)';
+			ok $i.parse('(1)+1+(1)'), '(1)+1+(1)';
+			ok $i.parse('1+(1)+(1)'), '1+(1)+(1)';
+			ok $i.parse('(1)+(1)+(1)'), '(1)+(1)+(1)';
+		}, 'another operator';
+	}, 'with operator';
+}, 'paren around single term';
+
+subtest {
+	ok $i.parse('(1+1)'), '(1+1)';
+
+	subtest {
+		ok $i.parse('(1+1)+1'), '(1+1)+1';
+		ok $i.parse('1+(1+1)'), '1+(1+1)';
+
+		subtest {
+			ok $i.parse('(1+1)+1+1'), '(1+1)+1+1';
+			ok $i.parse('1+1+(1+1)'), '1+1+(1+1)';
+			ok $i.parse('(1+1)+(1+1)'), '(1+1)+(1+1)';
+		}, 'even more operators';
+
+		ok $i.parse('1+(1+1)+1'), '1+(1+1)+1';
+	}, 'with another operator';
+
+	subtest {
+		ok $i.parse('((1+1))'), '((1+1))';
+
+		subtest {
+			ok $i.parse('((1+1)+1)'), '((1+1)+1)';
+			ok $i.parse('(1+(1+1))'), '(1+(1+1))';
+
+			subtest {
+				ok $i.parse('((1+1)+1+1)'), '((1+1)+1+1)';
+				ok $i.parse('(1+1+(1+1))'), '(1+1+(1+1))';
+				ok $i.parse('((1+1)+(1+1))'), '((1+1)+(1+1))';
+			}, 'even more operators';
+
+			ok $i.parse('(1+(1+1)+1)'), '(1+(1+1)+1)';
+		}, 'with another operator';
+	}, 'paren around statement';
+}, 'paren around operator';
 
 done-testing;
 

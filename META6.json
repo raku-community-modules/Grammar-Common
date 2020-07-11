@@ -22,7 +22,7 @@
     "Grammar::Common::Expression::Prefix::Actions": "lib//Grammar/Common/Expression/Prefix/Actions.pm6"
   },
   "support": {
-    "source": "https://github.com/raku-community-modules/raku-Grammar-Common"
+    "source": "https://github.com/raku-community-modules/raku-Grammar-Common.git"
   },
   "license": "Artistic-2.0",
   "tags": [

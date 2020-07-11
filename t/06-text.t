@@ -26,6 +26,7 @@ subtest "Grammar", {
     my $match = Sentences.parse( $str );
     is $match, $str, "Two sentences";
     is $match<sentence>[0].Hash<first-word>, "One", "Tokenized";
+    ok Sentences.parse( "Stir-fry garlic until golden-colored, chopped if you so  like, retire if you don't like the color."), "Long sentence";
 }
 
 subtest "Actions", {

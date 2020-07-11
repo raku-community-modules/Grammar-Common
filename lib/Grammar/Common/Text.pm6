@@ -1,11 +1,12 @@
 unit role Grammar::Common::Text;
 
-token sentence { <first-word> <separators> <words>* % <separators> <stop>}
+token sentence { <first-word> <separators> <sub-sentence> <stop>}
 
 token stop { "." | "?" | "!" }
 
-token separators { [","|";"|":"| ")" | "(" ]? \s+ }
+token sub-sentence { <words>* % <separators> }
+token separators { [","|";"|":" ]? \s+ }
 
-token first-word { <:Lt> <[\w \- \' \.]>* }
+token first-word { <:Lu> <[\w \- \' \.]>* }
 
-token words { <[\w \- \' \.]>+ }
+token words { <[\w \- \']>+ }

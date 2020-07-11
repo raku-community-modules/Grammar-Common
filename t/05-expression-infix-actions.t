@@ -31,7 +31,7 @@ class Divide-Operation { has ( $.lhs, $.rhs ) }
 class Modulo-Operation { has ( $.lhs, $.rhs ) }
 class PostScript::Actions does Grammar::Common::Expression::Prefix::Actions {
 	method value( $/ ) {
-		make Value.new( :value( ~$/ ) );
+		make Value.new( :value( +$/ ) );
 	}
 	method plus-operation( $lhs, $rhs ) {
 		return Plus-Operation.new(

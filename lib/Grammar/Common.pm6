@@ -5,7 +5,7 @@ use v6;
 =head1 Grammar::Common
 
 L<Grammar::Common> gives you a library of common grammar roles to use in
-your own code, from simple numbers and strings to vaidation tools.
+your own code, from simple numbers and strings to validation tools.
 
 =head1 Synopsis
 

@@ -5,7 +5,7 @@ use v6;
 =head1 Grammar::Common::Actions
 
 L<Grammar::Common::Actions> gives you a library of common grammar action roles
-to use in your own code, from simple numbers and strings to vaidation tools.
+to use in your own code, from simple numbers and strings to validation tools.
 
 =head1 Synopsis
 

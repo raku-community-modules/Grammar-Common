@@ -1,6 +1,4 @@
 # Grammar-Common [![Build Status](https://secure.travis-ci.org/raku-community-modules/raku-Grammar-Common.svg?branch=master)](http://travis-ci.org/raku-community-modules/raku-Grammar-Common)
-Grammar-Common
-=======
 
 Common bits for grammars, such as math expressions.
 

@@ -8,7 +8,7 @@
   ],
   "auth": "github:drforr",
   "depends": [
-    "Text::META",
+    "Test::META",
     "JSON::Tiny"
   ],
   "test-depends": [

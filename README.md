@@ -37,6 +37,43 @@ To run tests:
     zef test .
 ```
 
+## Examples
+
+Using prefix expressions:
+
+```raku
+grammar PostScript does Grammar::Common::Expression::Prefix {
+	token c-variable {
+		<[ a .. z ]> <[ a .. z A .. Z 0 .. 9 _ ]>*
+	}
+	token number {
+		'-'?  [
+			|| <[ 1 .. 7 ]> [ <[ 0 .. 7 _ ]> | '_' <[ 0 .. 7 ]> ]*
+			|| 0
+		]
+	}
+	token value {
+		|| <c-variable>
+		|| <number>
+	}
+
+	rule TOP { <expression> }
+}
+$p.parse( '+ 0 b' );
+$p.parse( '+ + 1 2 3' );
+```
+
+Or common text patterns:
+
+```
+grammar Sentences does Grammar::Common::Text {
+    token TOP { <sentence>+ % \s+ }
+}
+
+say Sentences.parse( "One, two, three.");
+say Sentences.parse( "One, two, three. Four, five!");
+```
+
 ## Author
 
 Jeffrey Goff, DrForr on #perl6, https://github.com/drforr/

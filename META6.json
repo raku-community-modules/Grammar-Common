@@ -1,7 +1,7 @@
 {
   "name": "Grammar::Common",
   "description": "Common grammar patterns codified for ease of use",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "perl": "6.c",
   "authors": [
     "Jeffrey Goff <drforr@pobox.com>"

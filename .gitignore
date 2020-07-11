@@ -1,2 +1,4 @@
 *.swp
-lib/.precomp/
+.precomp/
+.idea/
+*.iml

@@ -1,4 +1,4 @@
-# Grammar-Common [![Build Status](https://secure.travis-ci.org/drforr/perl6-Grammar-Common.svg?branch=master)](http://travis-ci.org/drforr/perl6-Grammar-Common)
+# Grammar-Common [![Build Status](https://secure.travis-ci.org/raku-community-modules/raku-Grammar-Common.svg?branch=master)](http://travis-ci.org/raku-community-modules/raku-Grammar-Common)
 Grammar-Common
 =======
 
@@ -19,7 +19,7 @@ are generally meant to be dropped in with
 
 In most cases default values will be provided, although I'm probably going to
 go with C-style variables and values, just because adding a full Perl-style
-expression encourages people to think it's reparsing Perl 6, but that's another
+expression encourages people to think it's reparsing Raku, but that's another
 module.
 
 Installation
@@ -36,7 +36,7 @@ Installation
 To run tests:
 
 ```
-    prove -e perl6
+    zef test .
 ```
 
 ## Author

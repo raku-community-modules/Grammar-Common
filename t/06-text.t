@@ -30,7 +30,7 @@ subtest "Grammar", {
 
 subtest "Actions", {
     my $parsed = Sentences.parse( "One, two, three? Four, five!", actions => Sentences-Actions.new );
-    is $parsed.made.elems, 2, "Sentence 
+    is $parsed.made.elems, 2, "Sentence tokenized";
     is $parsed.made[0], "One, two, three?", "First sentence";
 }
 

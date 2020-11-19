@@ -76,7 +76,7 @@ say Sentences.parse( "One, two, three. Four, five!");
 
 ## Author
 
-Jeffrey Goff, DrForr on #perl6, https://github.com/drforr/
+[Jeffrey Goff](https://github.com/rakudo/rakudo/blob/master/IN-MEMORIAM.md#jeff-goff-drforr)
 
 ## License
 

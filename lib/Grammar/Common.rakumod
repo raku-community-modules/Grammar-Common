@@ -1,14 +1,19 @@
-[![Actions Status](https://github.com/raku-community-modules/Grammar-Common/actions/workflows/test.yml/badge.svg)](https://github.com/raku-community-modules/Grammar-Common/actions)
+use Grammar::Common::Text;
+use Grammar::Common::Expression::Prefix;
+use Grammar::Common::Expression::Prefix::Actions;
+use Grammar::Common::Expression::Infix;
+use Grammar::Common::Expression::Infix::Actions;
 
-NAME
-====
+=begin pod
+
+=head1 NAME
 
 Grammar::Common - Common bits for grammars, such as math expressions
 
-SYNOPSIS
-========
+=head1 SYNOPSIS
 
-```raku
+=begin code :lang<raku>
+
 use Grammar::Common;  # load all modules:
 # Grammar::Common::Text
 # Grammar::Common::Expression::Prefix
@@ -34,27 +39,38 @@ say PostScript.parse( 'dup + 1 3' );
 #    value => ｢3｣
 #   rhs => ｢3｣
 #    value => ｢3｣
-```
 
-DESCRIPTION
-===========
+=end code
 
-`Grammar::Common` gives you a library of common grammar roles to use in your own code, from simple numbers and strings to validation tools.
+=head1 DESCRIPTION
 
-All files here will be roles, rather than standalone grammars and actions. Yes, simple actions are included that return simple hashes containing the parse tree. You can override these as well, or simply include your own actions.
+C<Grammar::Common> gives you a library of common grammar roles to
+use in your own code, from simple numbers and strings to validation
+tools.
 
-The test suite shows you how to return more complex objects - I elected not to do this even though it does make quite a bit more sense because I didn't want to arbitrary clutter the grammar namespace.
+All files here will be roles, rather than standalone grammars and actions.
+Yes, simple actions are included that return simple hashes containing the parse
+tree. You can override these as well, or simply include your own actions.
 
-Read the individual Grammar::Common files: these are generally meant to be dropped in with `does Grammar::Common::Expression::Infix` and using the resulting <expression> rule as you like.
+The test suite shows you how to return more complex objects - I elected not
+to do this even though it does make quite a bit more sense because I didn't
+want to arbitrary clutter the grammar namespace.
 
-In most cases default values will be provided, although I'm probably going to go with C-style variables and values, just because adding a full Perl-style expression encourages people to think it's reparsing Raku, but that's another module.
+Read the individual Grammar::Common files: these are generally meant to be
+dropped in with C<does Grammar::Common::Expression::Infix> and using the
+resulting <expression> rule as you like.
 
-EXAMPLES
-========
+In most cases default values will be provided, although I'm probably going to
+go with C-style variables and values, just because adding a full Perl-style
+expression encourages people to think it's reparsing Raku, but that's another
+module.
+
+=head1 EXAMPLES
 
 Using prefix expressions:
 
-```raku
+=begin code :lang<raku>
+
 use Grammar::Common::Expression::Prefix;
 
 grammar PostScript does Grammar::Common::Expression::Prefix {
@@ -76,11 +92,13 @@ grammar PostScript does Grammar::Common::Expression::Prefix {
 }
 say PostScript.parse( '+ 0 b' );
 say PostScript.parse( '+ + 1 2 3' );
-```
+
+=end code
 
 Or common text patterns:
 
-```raku
+=begin code :lang<raku>
+
 use Grammar::Common::Text;
 
 grammar Sentences does Grammar::Common::Text {
@@ -89,15 +107,14 @@ grammar Sentences does Grammar::Common::Text {
 
 say Sentences.parse( "One, two, three.");
 say Sentences.parse( "One, two, three. Four, five!");
-```
 
-AUTHOR
-======
+=end code
+
+=head1 AUTHOR
 
 Jeffrey Goff
 
-COPYRIGHT AND LICENSE
-=====================
+=head1 COPYRIGHT AND LICENSE
 
 Copyright 2017 - 2018 Jeffrey Goff
 
@@ -105,3 +122,6 @@ Copyright 2019 - 2022 Raku Community
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 
+=end pod
+
+# vim: expandtab shiftwidth=4

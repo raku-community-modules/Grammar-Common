@@ -1,36 +1,37 @@
 {
-  "name": "Grammar::Common",
-  "description": "Common grammar patterns codified for ease of use",
-  "version": "0.3.1",
-  "perl": "6.c",
+  "auth": "zef:raku-community-modules",
   "authors": [
-    "Jeffrey Goff <drforr@pobox.com>"
+    "Jeffrey Goff"
   ],
-  "auth": "github:drforr",
+  "build-depends": [
+  ],
   "depends": [
-    "Test::META",
-    "JSON::Tiny"
   ],
-  "test-depends": [
-    "Test"
-  ],
+  "description": "Common bits for grammars, such as math expressions",
+  "license": "Artistic-2.0",
+  "meta6": "0",
+  "name": "Grammar::Common",
+  "perl": "6.c",
   "provides": {
-    "Grammar::Common": "lib//Grammar/Common.pm6",
-    "Grammar::Common::Expression::Infix": "lib//Grammar/Common/Expression/Infix.pm6",
-    "Grammar::Common::Expression::Infix::Actions": "lib//Grammar/Common/Expression/Infix/Actions.pm6",
-    "Grammar::Common::Expression::Prefix": "lib//Grammar/Common/Expression/Prefix.pm6",
-    "Grammar::Common::Expression::Prefix::Actions": "lib//Grammar/Common/Expression/Prefix/Actions.pm6",
-    "Grammar::Common::Text": "lib/Grammar/Common/Text.pm6"
+    "Grammar::Common": "lib/Grammar/Common.rakumod",
+    "Grammar::Common::Expression::Infix": "lib/Grammar/Common/Expression/Infix.rakumod",
+    "Grammar::Common::Expression::Infix::Actions": "lib/Grammar/Common/Expression/Infix/Actions.rakumod",
+    "Grammar::Common::Expression::Prefix": "lib/Grammar/Common/Expression/Prefix.rakumod",
+    "Grammar::Common::Expression::Prefix::Actions": "lib/Grammar/Common/Expression/Prefix/Actions.rakumod",
+    "Grammar::Common::Text": "lib/Grammar/Common/Text.rakumod"
   },
+  "resources": [
+  ],
+  "source-url": "https://github.com/raku-community-modules/raku-Grammar-Common.git",
   "support": {
     "source": "https://github.com/raku-community-modules/raku-Grammar-Common.git"
   },
-  "license": "Artistic-2.0",
   "tags": [
-    "Grammar",
-    "Utilities",
-    "Utils"
+    "GRAMMAR",
+    "UTILITIES",
+    "UTILS"
   ],
-  "source-url": "https://github.com/raku-community-modules/raku-Grammar-Common.git",
-  "meta6": "0"
+  "test-depends": [
+  ],
+  "version": "0.3.2"
 }

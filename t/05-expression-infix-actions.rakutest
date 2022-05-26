@@ -1,7 +1,9 @@
-use v6;
 use Grammar::Common::Expression::Prefix;
 use Grammar::Common::Expression::Prefix::Actions;
+
 use Test;
+
+plan 3;
 
 #############################################################################
 
@@ -248,6 +250,4 @@ subtest {
 #	ok $p.parse( '++a 2c' );
 }, 'two operands';
 
-done-testing;
-
-# vim: ft=perl6
+# vim: expandtab shiftwidth=4

@@ -1,5 +1,8 @@
-use Test;
 use Grammar::Common::Text;
+
+use Test;
+
+plan 3;
 
 grammar Sentences does Grammar::Common::Text {
     token TOP { <sentence>+ % \s+ }
@@ -35,4 +38,4 @@ subtest "Actions", {
     is $parsed.made[0], "One, two, three?", "First sentence";
 }
 
-done-testing;
+# vim: expandtab shiftwidth=4

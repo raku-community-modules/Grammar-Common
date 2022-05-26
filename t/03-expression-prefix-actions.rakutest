@@ -1,6 +1,9 @@
-use v6;
 use Grammar::Common::Expression::Prefix;
+use Grammar::Common::Expression::Prefix::Actions;
+
 use Test;
+
+plan 3;
 
 #############################################################################
 
@@ -10,7 +13,7 @@ grammar PostScript does Grammar::Common::Expression::Prefix {
 	}
 	token number {
 		'-'?  [
-			|| <[ 1 .. 7 ]> [ <[ 0 .. 7 _ ]> | '_' <[ 0 .. 7 ]> ]*
+			|| <[ 1 .. 7 ]> [ <[ 0 .. 7 ]> | '_' <[ 0 .. 7 ]> ]*
 			|| 0
 		]
 	}
@@ -22,10 +25,97 @@ grammar PostScript does Grammar::Common::Expression::Prefix {
 	rule TOP { <expression> }
 }
 
+class Value { has ( $.value ) }
+class Plus-Operation { has ( $.lhs, $.rhs ) }
+class Minus-Operation { has ( $.lhs, $.rhs ) }
+class Times-Operation { has ( $.lhs, $.rhs ) }
+class Divide-Operation { has ( $.lhs, $.rhs ) }
+class Modulo-Operation { has ( $.lhs, $.rhs ) }
+class PostScript::Actions does Grammar::Common::Expression::Prefix::Actions {
+	method value( $/ ) {
+		make Value.new( :value( +$/ ) );
+	}
+	method plus-operation( $lhs, $rhs ) {
+		return Plus-Operation.new(
+			:lhs( $lhs ),
+			:rhs( $rhs )
+		);
+	}
+	method minus-operation( $lhs, $rhs ) {
+		return Minus-Operation.new(
+			:lhs( $lhs ),
+			:rhs( $rhs )
+		);
+	}
+	method times-operation( $lhs, $rhs ) {
+		return Times-Operation.new(
+			:lhs( $lhs ),
+			:rhs( $rhs )
+		);
+	}
+	method divide-operation( $lhs, $rhs ) {
+		return Divide-Operation.new(
+			:lhs( $lhs ),
+			:rhs( $rhs )
+		);
+	}
+	method modulo-operation( $lhs, $rhs ) {
+		return Modulo-Operation.new(
+			:lhs( $lhs ),
+			:rhs( $rhs )
+		);
+	}
+	method TOP( $/ ) {
+		make $/<expression>.ast;
+	}
+}
+
 #############################################################################
 
 my $p = PostScript.new;
+my $a = PostScript::Actions.new;
 
+#`(
+
+subtest {
+	is-deeply $p.parse( '+ 1 2', :actions( $a ) ).ast,
+		Plus-Operation.new(
+			:lhs( Value.new( :value( 1 ) ) ),
+			:rhs( Value.new( :value( 2 ) ) ) );
+	is-deeply $p.parse( '* 1 2', :actions( $a ) ).ast,
+		Times-Operation.new(
+			:lhs( Value.new( :value( 1 ) ) ),
+			:rhs( Value.new( :value( 2 ) ) ) );
+	is-deeply $p.parse( '- 1 2', :actions( $a ) ).ast,
+		Minus-Operation.new(
+			:lhs( Value.new( :value( 1 ) ) ),
+			:rhs( Value.new( :value( 2 ) ) ) );
+	is-deeply $p.parse( '/ 1 2', :actions( $a ) ).ast,
+		Divide-Operation.new(
+			:lhs( Value.new( :value( 1 ) ) ),
+			:rhs( Value.new( :value( 2 ) ) ) );
+}, 'single operation';
+
+is-deeply $p.parse(
+	'+ 1 * 2 3',
+	:actions( $a )
+).ast, Plus-Operation.new(
+	:lhs( Value.new( :value( 1 ) ) ),
+	:rhs( Times-Operation.new(
+		:lhs( Value.new( :value( 2 ) ) ),
+		:rhs( Value.new( :value( 3 ) ) ) ) ) );
+is-deeply $p.parse(
+	'- * 1 3 7',
+	:actions( $a )
+).ast, Minus-Operation.new(
+	:lhs( Times-Operation.new(
+		:lhs( Value.new( :value( 1 ) ) ),
+		:rhs( Value.new( :value( 3 ) ) ) ) ),
+	:rhs( Value.new( :value( 7 ) ) )
+);
+)
+
+#`(
 subtest {
 	nok $p.parse( '' ), 'empty expression';
 
@@ -91,19 +181,26 @@ subtest {
 		nok $p.parse( '-1 -1' );
 	}, 'two operands';
 }, 'failing tests';
+)
 
 subtest {
 	subtest {
 		subtest {
-			ok $p.parse( '0' ), '0';
-			ok $p.parse( '1' ), '1';
-			ok $p.parse( '7' ), '7';
-			ok $p.parse( '-1' ), '-1';
+			is-deeply $p.parse( '0', :actions( $a ) ).ast,
+				Value.new( :value( 0 ) ), '0';
+			is-deeply $p.parse( '1', :actions( $a ) ).ast,
+				Value.new( :value( 1 ) ), '1';
+			is-deeply $p.parse( '7', :actions( $a ) ).ast,
+				Value.new( :value( 7 ) ), '7';
+			is-deeply $p.parse( '-1', :actions( $a ) ).ast,
+				Value.new( :value( -1 ) ), '-1';
 		}, 'single digit';
 
 		subtest {
-			ok $p.parse( '10' ), '10';
-			ok $p.parse( '1_0' ), '1_0';
+			is-deeply $p.parse( '10', :actions( $a ) ).ast,
+				Value.new( :value( 10 ) ), '10';
+			is-deeply $p.parse( '1_2', :actions( $a ) ).ast,
+				Value.new( :value( 12 ) ), '12';
 		}, 'multiple digits';
 	}, 'number';
 
@@ -153,6 +250,4 @@ subtest {
 #	ok $p.parse( '++a 2c' );
 }, 'two operands';
 
-done-testing;
-
-# vim: ft=perl6
+# vim: expandtab shiftwidth=4

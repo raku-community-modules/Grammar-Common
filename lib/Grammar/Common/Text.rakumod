@@ -10,3 +10,5 @@ token separators { [","|";"|":" ]? \s+ }
 token first-word { <:Lu> <[\w \- \' \.]>* }
 
 token words { <[\w \- \']>+ }
+
+# vim: expandtab shiftwidth=4

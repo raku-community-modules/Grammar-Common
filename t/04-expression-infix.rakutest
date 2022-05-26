@@ -1,6 +1,8 @@
-use v6;
 use Grammar::Common::Expression::Infix;
+
 use Test;
+
+plan 5;
 
 #############################################################################
 
@@ -228,6 +230,4 @@ subtest {
 	}, 'paren around statement';
 }, 'paren around operator';
 
-done-testing;
-
-# vim: ft=perl6
+# vim: expandtab shiftwidth=4
